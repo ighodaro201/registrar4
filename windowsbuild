@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+#-----------------------------------------------------------------------
+# testing helper
+# Author: Osita Ighodaro
+#-----------------------------------------------------------------------
+
+cp=.
+for jarfile in ~/lib/sqlite/*.jar ~/lib/spark/*.jar; do
+   cp=$cp:$jarfile
+done
+
+javac -cp $cp "$@"
