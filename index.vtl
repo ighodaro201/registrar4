@@ -1,24 +1,26 @@
 <!DOCTYPE html>
     <html>
         <head>
-            <title>Registrar's Office Class Search</title>
+            <title>Registrar's Office Class Search></title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         </head>
         <body>
-        <h1>Registrar's Office: Class Search</h1>
-        <hr>
-        
+        <center><h1>Registrar's Office: Class Search</h1></center>
+
+        <center>
         <table>
             <tr>
-                <td> <input type="text" id="deptInput" oninput="getResults()" placeholder="dept"> </td>
-                <td> <input type="text" id="coursenumInput" oninput="getResults()" placeholder="coursenum"> </td>
-                <td> <input type="text" id="areaInput" oninput="getResults()" placeholder="area"> </td>
-                <td> <input type="text" id="titleInput" oninput="getResults()" placeholder="title"> </td>
+                <td> <input type="text" id="deptInput" oninput="getResults()" placeholder="Department"> </td>
+                <td> <input type="text" id="coursenumInput" oninput="getResults()" placeholder="Course Number"> </td>
+                <td> <input type="text" id="areaInput" oninput="getResults()" placeholder="Area"> </td>
+                <td> <input type="text" id="titleInput" oninput="getResults()" placeholder="Title"> </td>
             </tr>
         <table>
-
-        <table class="table" id="results">
+        </center>
+        
+        <br>
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col"> ClassId </th>
@@ -28,14 +30,10 @@
                     <th scope="col" style="text-align:left"> Title </th>
                 <tr>
             </thead>
-            <tbody>
-                #foreach (${c} in ${courses})
+            <tbody id="results">
+                #foreach (${r} in ${rows})
                 <tr>
-                    <td> <a href="regdetails?classid=${c.getClassID()}"> ${c.getClassID()} </td>
-                    <td> ${c.getDept()} </td>
-                    <td> ${c.getCourseNum()} </td>
-                    <td> ${c.getArea()} </td>
-                    <td> ${c.getTitle()} </td>
+                    ${r}
                 <tr>
                 #end
             </tbody>
@@ -91,8 +89,8 @@
                 
                 if (this.status != 200)  // Request succeeded?
                 {  
-                    //alert(
-                    //   "AJAX error: Request failed: " + this.statusText);
+                    alert(
+                    "AJAX error: Request failed: " + this.statusText);
                     return;
                 }
                 
@@ -112,14 +110,18 @@
             
             function getResults()
             {
-                let dept = document.getElementById('authorInput').value;
-                let coursenum = document.getElementById('authorInput').value;
-                let area = document.getElementById('authorInput').value;
-                let title = document.getElementById('authorInput').value;
+                let dept = document.getElementById('deptInput').value;
+                let coursenum = document.getElementById('coursenumInput').value;
+                let area = document.getElementById('areaInput').value;
+                let title = document.getElementById('titleInput').value;
 
                 dept = encodeURIComponent(dept);
+                coursenum = encodeURIComponent(coursenum);
+                area = encodeURIComponent(area);
+                title = encodeURIComponent(title);
+
                 let messageId = Math.floor(Math.random(seed) * 1000000) + 1;
-                let url = "index?dept=" + dept + "&coursenum=" + coursenum + "&area=" + area + "&title=" + 
+                let url = "/index?dept=" + dept + "&coursenum=" + coursenum + "&area=" + area + "&title=" + 
                 title + "&messageId=" + messageId;
                 
                 if (request != null)

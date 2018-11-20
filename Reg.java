@@ -48,8 +48,15 @@ public class Reg
             return e.toString();
         }
 
+        ArrayList<String> rows = new ArrayList<String>();
+        for (CourseBasic c: courses)
+        {
+            rows.add("<td> <a href=\"regdetails?classid=" + c.getClassID() + "\">" + c.getClassID() + "</td> <td>" + c.getDept() + 
+            "</td> <td>" + c.getCourseNum() + "</td> <td>" + c.getArea() + "</td> <td>" + c.getTitle() + "</td>");
+        }
+
         Map<String, Object> model = new HashMap<>();
-        model.put("courses", courses);
+        model.put("rows", rows);
 		ModelAndView mv = new ModelAndView(model, "index.vtl");
         return new VelocityTemplateEngine().render(mv); 
    }
