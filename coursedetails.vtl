@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <title>Registrar's Office Class Search</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        </head>
+        <body>
+       <center><h1>Registrar's Office: Class Details</h1></center>
+
+       <hr>
+
+        <h2>Class Details (class id ${infoArray.get(0)})</h2>
+        <b>Course Id: </b> ${infoArray.get(1)}
+        <br>
+
+        <b>Days: </b> ${infoArray.get(2)}
+        <br>
+
+        <b>Start time: </b> ${infoArray.get(3)}
+        <br>
+
+        <b>End time: </b> ${infoArray.get(4)}
+        <br>
+
+        <b>Building: </b> ${infoArray.get(5)}
+        <br>
+
+        <b>Room: </b> ${infoArray.get(6)}
+        <br>
+        <hr>
+
+        <h2>Course Details (course id ${infoArray.get(1)})</h2>
+
+        #foreach (${c} in ${classes})
+            ${c}
+        #end
+
+        <b>Area: </b> ${infoArray.get(7)}
+        <br>
+        <b>Title: </b> ${infoArray.get(8)}
+        <br>
+        <b>Description: </b> ${infoArray.get(10)}
+        <br>
+        <b>Prerequisites: </b> ${infoArray.get(9)}
+        <br>
+        
+        ${profs}
+    
+        <hr>     
+        </body>
+
+        <foot>
+        Created by Osita Ighodaro and Ben Musoke-Lubega
+        </foot>
+
+    </html>

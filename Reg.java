@@ -51,7 +51,7 @@ public class Reg
         ArrayList<String> rows = new ArrayList<String>();
         for (CourseBasic c: courses)
         {
-            rows.add("<td> <a href=\"regdetails?classid=" + c.getClassID() + "\">" + c.getClassID() + "</td> <td>" + c.getDept() + 
+            rows.add("<td> <a  target=\"_blank\" href=\"regdetails?classid=" + c.getClassID() + "\">" + c.getClassID() + "</td> <td>" + c.getDept() + 
             "</td> <td>" + c.getCourseNum() + "</td> <td>" + c.getArea() + "</td> <td>" + c.getTitle() + "</td>");
         }
 
@@ -68,16 +68,7 @@ public class Reg
         String coursenum = req.cookie("coursenum");
         String area = req.cookie("area");
         String title = req.cookie("title");
-
-
-        String html = ""; 
-        html += "<!DOCTYPE html>";
-        html += "<html>";
-        html += "<head>";
-        html += "<title>Registrar's Office Class Search</title>";
-        html += "</head>";
-        html += "<body>";
-        html += "<h1>Registrar's Office</h1>";
+        String html = "";
 
         CourseInfo info = null;
         try
@@ -109,75 +100,41 @@ public class Reg
             return html;
         }
 
-        html += "<hr>";
-        html += "<h2>";
-        html += "Class Details (class id " + classId + ")";
-        html += "</h2>";
-
-        html += "<b>Course Id: </b>" + info.getCourseID();
-        html += "<br>";
-
-        html += "<b>Days: </b>" + info.getDays();
-        html += "<br>";
-
-        html += "<b>Start time: </b>" + info.getStartTime();
-        html += "<br>";
-
-        html += "<b>End time: </b>" + info.getEndTime();
-        html += "<br>";
-
-        html += "<b>Building: </b>" + info.getBldg();
-        html += "<br>";
-
-        html += "<b>Room: </b>" + info.getRoomNum();
-        html += "<br>";
-        html += "<hr>";
-
-        html += "<h2>";
-        html += "Course Details (course id " + info.getCourseID() + ")";
-        html += "</h2>";
-
+        ArrayList<String> classes = new ArrayList<String>();
         for (int i = 0; i < info.getDept().length; i++)
         {
-            html += "<b>Dept and Number: </b>";
-            html += info.getDept()[i] + " " + info.getCourseNum()[i] + "<br>";
+            String s = " <b>Dept and Number: </b>";
+            s += info.getDept()[i] + " " + info.getCourseNum()[i] + "<br>";
+            classes.add(s);
         }
         
-        html += "<b>Area: </b>" + info.getArea();
-        html += "<br>";
-        html += "<b>Title: </b>" + info.getTitle();
-        html += "<br>";
-        html += "<b>Description: </b>" + info.getDescrip();
-        html += "<br>";
-        html += "<b>Prerequisites: </b>" + info.getPrereqs();
-        html += "<br>";
-        
-        html += "<b>Professor(s): </b>";
+        String profs = "<b>Professor(s): </b>";
         for (int i = 0; i < info.getProfNames().length; i++)
         {
             if (i == 0) {}
-            else if (i < info.getProfNames().length - 1) html += ", ";
-            else html += " and ";
-            html += info.getProfNames()[i];
+            else if (i < info.getProfNames().length - 1) profs += ", ";
+            else profs += " and ";
+            profs += info.getProfNames()[i];
         }
+        ArrayList<String> infoArray = new ArrayList<String>();
+        infoArray.add(info.getClassID());
+        infoArray.add(info.getCourseID());
+        infoArray.add(info.getDays());
+        infoArray.add(info.getStartTime());
+        infoArray.add(info.getEndTime());
+        infoArray.add(info.getBldg());
+        infoArray.add(info.getRoomNum());
+        infoArray.add(info.getArea());
+        infoArray.add(info.getTitle());
+        infoArray.add(info.getPrereqs());
+        infoArray.add(info.getDescrip());
 
-        html += "<hr>";
-        html += "<p>";
-        html += "Click here to do ";
-        html += "<a href=\"index?dept=" + dept + "&coursenum=" + coursenum + "&area=" + area + "&title=" + title + "\">another class search </a>.";
-        html += "</p>";
-        html += "<hr>";      
-        html += "</body>";
-
-        html += "<foot>";
-        html += "Created by Osita Ighodaro and Ben Musoke-Lubega";
-        html += "<hr>";
-        html += "</foot>";
-
-        html += "</html>";
-
-        return html;
-
+        Map<String, Object> model = new HashMap<>();
+        model.put("infoArray", infoArray);
+        model.put("profs", profs);
+        model.put("classes", classes);
+		ModelAndView mv = new ModelAndView(model, "coursedetails.vtl");
+        return new VelocityTemplateEngine().render(mv); 
    }
    public static void main(String[] args) 
    {
