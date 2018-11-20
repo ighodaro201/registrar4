@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+#-----------------------------------------------------------------------
+# build
+# Author: Osita Ighodaro Ben Musoke-Lubega
+#-----------------------------------------------------------------------
+
+cp=
+for jarfile in ~/lib/spark/*.jar; do
+   cp=$cp:$jarfile
+done
+
+javac -cp $cp "$@"

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <title>Registrar's Office Class Search</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        </head>
+        <body>
+        <h1>Registrar's Office: Class Search</h1>
+        <hr>
+        
+        <table>
+            <tr>
+                <td> <input type="text" id="deptInput" oninput="getResults()" placeholder="dept"> </td>
+                <td> <input type="text" id="coursenumInput" oninput="getResults()" placeholder="coursenum"> </td>
+                <td> <input type="text" id="areaInput" oninput="getResults()" placeholder="area"> </td>
+                <td> <input type="text" id="titleInput" oninput="getResults()" placeholder="title"> </td>
+            </tr>
+        <table>
+
+        <table class="table" id="results">
+            <thead>
+                <tr>
+                    <th scope="col"> ClassId </th>
+                    <th scope="col"> Dept </th>
+                    <th scope="col"> Num </th>
+                    <th scope="col"> Area </th>
+                    <th scope="col" style="text-align:left"> Title </th>
+                <tr>
+            </thead>
+            <tbody>
+                #foreach (${c} in ${courses})
+                <tr>
+                    <td> <a href="regdetails?classid=${c.getClassID()}"> ${c.getClassID()} </td>
+                    <td> ${c.getDept()} </td>
+                    <td> ${c.getCourseNum()} </td>
+                    <td> ${c.getArea()} </td>
+                    <td> ${c.getTitle()} </td>
+                <tr>
+                #end
+            </tbody>
+        </table>
+        </body>
+
+        <foot>
+            <hr>
+            Created by Osita Ighodaro and Ben Musoke-Lubega
+            <hr>
+        </foot>
+
+        <script>
+
+            function createAjaxRequest()  // From Nixon book
+            {
+                let req;       
+                try  // Some browser other than Internet Explorer
+                {
+                    req = new XMLHttpRequest();
+                }
+                catch (e1) 
+                {    
+                    try  // Internet Explorer 6+
+                    {
+                        req = new ActiveXObject("Msxml2.XMLHTTP");
+                    }
+                    catch (e2) 
+                    {  
+                        try  // Internet Explorer 5
+                        { 
+                            req = new ActiveXObject("Microsoft.XMLHTTP"); 
+                        }
+                        catch (e3)
+                        {  
+                            req = false;
+                        }
+                    }
+                }
+                return req;
+            }
+
+            function processReadyStateChange()
+            {
+                const STATE_UNINITIALIZED = 0;
+                const STATE_LOADING       = 1;
+                const STATE_LOADED        = 2;
+                const STATE_INTERACTIVE   = 3;
+                const STATE_COMPLETED     = 4;
+                
+                if (this.readyState != STATE_COMPLETED)
+                return;
+                
+                if (this.status != 200)  // Request succeeded?
+                {  
+                    //alert(
+                    //   "AJAX error: Request failed: " + this.statusText);
+                    return;
+                }
+                
+                if (this.responseText == null)  // Data received?
+                {  
+                    alert("AJAX error: No data received");
+                    return;
+                }
+
+                let results = 
+                document.getElementById("results");
+                results.innerHTML = this.responseText;
+            }
+
+            let seed = date.getSeconds();
+            let request = null;
+            
+            function getResults()
+            {
+                let dept = document.getElementById('authorInput').value;
+                let coursenum = document.getElementById('authorInput').value;
+                let area = document.getElementById('authorInput').value;
+                let title = document.getElementById('authorInput').value;
+
+                dept = encodeURIComponent(dept);
+                let messageId = Math.floor(Math.random(seed) * 1000000) + 1;
+                let url = "index?dept=" + dept + "&coursenum=" + coursenum + "&area=" + area + "&title=" + 
+                title + "&messageId=" + messageId;
+                
+                if (request != null)
+                request.abort();
+                
+                request = createAjaxRequest();
+                if (request == null) return;
+                request.onreadystatechange = processReadyStateChange;
+                request.open("GET", url);
+                request.send(null);
+            }
+            </script>
+     </html>

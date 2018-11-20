@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+#-----------------------------------------------------------------------
+# runserver
+# Author: Osita Ighodaro Ben Musoke-Lubega
+#-----------------------------------------------------------------------
+
+cp=.
+for jarfile in ~/lib/sqlite/*.jar ~/lib/spark/*.jar; do
+   cp=$cp:$jarfile
+done
+
+java -cp $cp "$@"
