@@ -44,8 +44,11 @@ public class Reg
         }
         catch (Exception e)
         {
-            // have to do error stuff again
-            return e.toString();
+            String errorMessage = "<p>" + e.toString() + "</p>";
+            Map<String, Object> model = new HashMap<>();
+            model.put("errorMessage", errorMessage);
+            ModelAndView mv = new ModelAndView(model, "error.vtl");
+            return new VelocityTemplateEngine().render(mv);
         }
 
         ArrayList<String> rows = new ArrayList<String>();
@@ -87,8 +90,11 @@ public class Reg
         }
         catch (Exception e)
         {
-            // have to do error stuff again
-            return e.toString();
+            String errorMessage = "<p>" + e.toString() + "</p>";
+            Map<String, Object> model = new HashMap<>();
+            model.put("errorMessage", errorMessage);
+            ModelAndView mv = new ModelAndView(model, "error.vtl");
+            return new VelocityTemplateEngine().render(mv);
         }
 
         ArrayList<String> rows = new ArrayList<String>();
@@ -125,24 +131,26 @@ public class Reg
         }
         catch (Exception e)
         {
-            return e.toString();
+            String errorMessage = "<p>" + e.toString() + "</p>";
+            Map<String, Object> model = new HashMap<>();
+            model.put("errorMessage", errorMessage);
+            ModelAndView mv = new ModelAndView(model, "error.vtl");
+            return new VelocityTemplateEngine().render(mv);
         }
 
         if (info == null)
         {
-            html += "<p>";
-            if (classId == null || classId == "") html += "Missing class id";
-            else if (Pattern.matches("[0-9]*", classId)) html += "Class id " + classId + " does not exist.";
-            else html += "Class id is not numeric";
-            html += "</p>";
-            html += "<hr>";
-            html += "<foot>";
-            html += "Created by Osita Ighodaro and Ben Musoke-Lubega";
-            html += "<hr>";
-            html += "</foot>";
-            html += "</html>";
+            String e = "";
+            if (classId == null || classId == "") e = "Missing class id";
+            else if (Pattern.matches("[0-9]*", classId)) e = "Class id " + classId + " does not exist.";
+            else e = "Class id is not numeric";
 
-            return html;
+            String errorMessage = "<p>" + e + "</p>";
+            Map<String, Object> model = new HashMap<>();
+            model.put("errorMessage", errorMessage);
+            ModelAndView mv = new ModelAndView(model, "error.vtl");
+            return new VelocityTemplateEngine().render(mv);
+            
         }
 
         ArrayList<String> classes = new ArrayList<String>();
