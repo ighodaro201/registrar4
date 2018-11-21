@@ -61,6 +61,51 @@ public class Reg
         return new VelocityTemplateEngine().render(mv); 
    }
 
+   private static String search(Request req, Response res)
+    {             
+        String dept = req.queryParams("dept");
+        String coursenum = req.queryParams("coursenum");
+        String area = req.queryParams("area");
+        String title = req.queryParams("title");
+
+        String[] fields = {dept, coursenum, area, title};
+        for (int i = 0; i < fields.length; i++)
+            if (fields[i] == null) fields[i] = "";
+        
+        res.cookie("dept", fields[0]);
+        res.cookie("coursenum", fields[1]);
+        res.cookie("area", fields[2]);
+        res.cookie("title", fields[3]);
+
+        ArrayList<CourseBasic> courses = null;
+        try
+        {
+            Database database = new Database();
+            database.connect();
+            courses = database.searchBasic(fields);
+            database.disconnect();
+        }
+        catch (Exception e)
+        {
+            // have to do error stuff again
+            return e.toString();
+        }
+
+        ArrayList<String> rows = new ArrayList<String>();
+        for (CourseBasic c: courses)
+        {
+            rows.add("<td> <a  target=\"_blank\" href=\"regdetails?classid=" + c.getClassID() + "\">" + c.getClassID() + "</td> <td>" + c.getDept() + 
+            "</td> <td>" + c.getCourseNum() + "</td> <td>" + c.getArea() + "</td> <td>" + c.getTitle() + "</td>");
+        }
+        
+        Map<String, Object> model = new HashMap<>();
+        model.put("rows", rows);
+		ModelAndView mv = new ModelAndView(model, "search.vtl");
+        return new VelocityTemplateEngine().render(mv); 
+   }
+
+
+
    private static String courseDetails(Request req, Response res) throws UnsupportedEncodingException
    {
         String classId = req.queryParams("classid");
@@ -156,6 +201,10 @@ public class Reg
 
       Spark.get("/regdetails",
          (req, res) -> courseDetails(req, res)
+      );
+
+      Spark.get("/search",
+         (req, res) -> search(req, res)
       );
    }
 }
