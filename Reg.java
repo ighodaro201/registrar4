@@ -198,7 +198,7 @@ public class Reg
       } 
 
       Spark.port(Integer.parseInt(args[0]));
-      
+
       Spark.get("/", 
          (req, res) -> index(req, res)
       );
